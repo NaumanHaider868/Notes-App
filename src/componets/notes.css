@@ -1,0 +1,100 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+.main{
+    background: #F3BBA0;
+    /* width: 100%; */
+    height: 100vh;
+    overflow-x: hidden;
+}
+
+.content{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.content .row{
+    width: 470px;
+    color: #fff;
+}
+
+.icon{
+    display: flex;
+    color: #fff;
+}
+
+.icon span svg,.content p{
+    font-size: 17px;
+}
+
+.navbar{
+    background: #F06C24;
+    padding: 12px 12px 0px;
+    width: 470px;
+    margin-left: 23px;
+}
+
+.container svg{
+    margin-bottom: 14px;
+    cursor: pointer;
+}
+/* .navbar .container{
+    justify-content: space-between;
+}  */
+.main-content{
+    margin-top: 17px;
+    width: 470px;
+}
+.inputField{
+    position: relative;
+    margin-left: 12px;
+    width: 100%;
+}
+.inputField input{
+    background: #fff;
+    box-shadow: none;
+    border: none;
+    padding: 10px;
+    width: 470px;
+    border-radius: 20px;
+    position: relative;
+}
+
+.inputField input:focus{
+    outline: none;
+}
+.inputField input::placeholder{
+    padding-left: 12px;
+}
+.inputField svg{
+    position: absolute;
+    z-index: 1;
+    right: 28px;
+    font-size: 17px;
+    margin-top: 13px;
+    cursor: pointer;;
+}
+.main-content .row{
+    margin-left: 18px;
+    margin-top: 17px;
+}
+.main-content .col-md-4{
+    background: #fff;
+    color: black;
+}
+
+.box1{
+    padding-top: 10px;
+}
+.box2{
+    margin-left: 134px;
+    padding-top: 10px;
+}
+
+.head{
+    display: flex;
+    justify-content: space-between;
+}

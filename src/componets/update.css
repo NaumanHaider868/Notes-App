@@ -1,0 +1,201 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+.main{
+    background: #F3BBA0;
+    /* width: 100%; */
+    height: 100vh;
+    overflow-x: hidden;
+}
+
+.content{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.content .row{
+    width: 470px;
+    color: #fff;
+}
+
+.icon{
+    display: flex;
+    color: #fff;
+}
+
+.icon span svg,.content p{
+    font-size: 17px;
+}
+
+.navbar{
+    background: #F06C24;
+    padding: 12px 12px 0px;
+    width: 470px;
+    margin-left: 23px;
+}
+.navbar a{
+    color: #212529;
+}
+.navbar a:hover{
+    color: #212529;
+}
+.container svg{
+    margin-bottom: 14px;
+    cursor: pointer;
+}
+.navbar>.container{
+    justify-content: flex-start;
+} 
+.main-content{
+    margin-top: 17px;
+    width: 470px;
+    position: relative;
+}
+.inputField{
+    margin-left: 12px;
+    width: 100%;
+}
+.inputField input{
+    background: #fff;
+    box-shadow: none;
+    border: none;
+    padding: 10px;
+    width: 470px;
+    border-radius: 20px;
+}
+
+.inputField input:focus{
+    outline: none;
+}
+.inputField input::placeholder{
+    padding-left: 12px;
+}
+.main-content .row{
+    margin-left: 7px;
+    margin-top: 17px;
+}
+.box{
+    height: 100%;
+    margin-bottom: 28px;
+    padding: 10px;
+    background: #fff;
+    border-radius: 7px;
+    width: 45%;
+    margin: 11px;
+    color: #212529;
+}
+.head{
+    display: flex;
+    justify-content: space-between;
+    background: #fff;
+    color: black;
+    padding: 5px;
+    border-radius: 22px;
+}
+.head .inputs{
+    margin-top: 5px;
+    margin-left: 5px;
+}
+.head .note-input{
+    border: none;
+    margin-left: 5px;
+    width: 75px;
+}
+.head .note-input:focus{
+    outline: none;
+    border-bottom: 1px solid #ccc;
+}
+.head .note-input::placeholder{
+    font-size: 13px;
+}
+.date-time{
+    font-size: 12px;
+    margin-left: 17px;
+    color: #8a7a7a;
+}
+.amount-icon{
+    margin-top: 5px;
+}
+.amount{
+    border: none;
+    width: 50px;
+}
+.amount:focus{
+    border-bottom: 1px solid #ccc;
+    outline: none;
+}
+.head .amount::placeholder{
+    font-size: 13px;
+}
+.amount-icon svg{
+    font-size: 18px;
+    margin-right: 10px;
+    cursor: pointer;
+}
+.box2{
+    padding-top: 0;
+}
+.btn-box{
+    display: flex;
+    justify-content: center;
+}
+
+.btn-note{
+    margin-top: 20px;
+    background: #F06C24;
+    color: #fff;
+    margin-left: 10px;
+    width: 100px;
+}
+.btn-note:hover{
+    background: #F06C24;
+    color: #fff;
+}
+
+
+.btn:active{
+    background: #F06C24;
+    border: none;
+}
+
+.bottom-btn{
+    display: flex;
+    background: #f06c24;
+    width: 49px;
+    height: 49px;
+    border-radius: 42px;
+    position: fixed;
+    bottom: 34px;
+    right: 450px;
+    justify-content: center;
+    text-align: center;
+}
+.bottom-btn .btn{
+    padding: 0;
+    color: #fff;
+}
+
+
+/* Title Button */
+.title-head{
+    display: flex;
+}
+.title-head ul{
+    width: 74px;
+}
+.title-icon{
+    margin-top: -8px;
+    margin-left: 70px;
+}
+.title-btn{
+    border: none;
+}
+.title-btn::after{
+    display: none;
+}
+.title-btn svg{
+    font-size: 18px;
+}

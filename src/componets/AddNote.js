@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { v4 as uuidv4 } from 'uuid';
 
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 import '../componets/update.css';
 
@@ -102,8 +102,8 @@ function AddNote() {
                         </div>
                     </div>
                     <Navbar style={{ padding: '12px 12px 0px 0px', justifyContent: 'flexSart' }}>
-                        <Container onClick={_addNote}>
-                           <ArrowBack />
+                        <Container>
+                           <ArrowBack onClick={_addNote}/>
                             <p>Add Notes</p>
                         </Container>
                     </Navbar>

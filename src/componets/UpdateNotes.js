@@ -18,70 +18,20 @@ import { Navbar, Container } from 'react-bootstrap';
 function UpdateNotes() {
     const { state, sum } = useLocation();
     // console.log(state);
-    const [inputList, setInputList] = useState([{ id: uuidv4(), noteTitle: '', amount: '', status: false }]);
+    const [inputList, setInputList] = useState([{ /*id: uuidv4(),*/ noteTitle: '', amount: '', status: false }]);
     const [title, setTitle] = useState("");
-    const [total, setTotal] = useState(0)
+    const [total, setTotal] = useState(0);
+    const [noteId , setNoteId] = useState("");
 
 
     useEffect(() => {
         setInputList(state.notes);
         setTitle(state.title);
+        setNoteId(state.id);
         // setTotal(sum);
     }, [])
     const date = new Date().toLocaleDateString();
     const time = new Date().toLocaleTimeString();
-
-    // const handleRemoveClick = removeindex => {
-    //     setInputList(e => e.filter((arr, index) => index !== removeindex));
-    // }
-    // const handleInputChange = (e, index) => {
-    //     const { name, value } = e.target;
-    //     const list = [...inputList];
-    //     list[index][name] = value;
-    //     setInputList(list);
-
-    //     let notesArray = [];
-    //     let data = {
-    //         "id": uuidv4(),
-    //         "title": title,
-    //         "notes": inputList
-    //     };
-    //     notesArray.push(data);
-    //     localStorage.setItem("notes", JSON.stringify(notesArray));
-    //     console.log(notesArray)
-    // };
-
-    // const navigate = useNavigate();
-    // const _addNote = () => {
-    //     let notesArray = localStorage.getItem('notes') ? JSON.parse(localStorage.getItem('notes')) : [];
-    //     let data = {
-    //         "id": uuidv4(),
-    //         "title": title,
-    //         "notes": inputList
-    //     }
-    //     notesArray.push(data);
-    //     localStorage.setItem("notes", JSON.stringify(notesArray));
-    //     console.log(notesArray)
-
-    //     navigate('/');
-    // }
-
-    // const titleChange = (e) => {
-    //     let notesArray = [];
-
-    //     let data = {
-    //         "id": uuidv4(),
-    //         "title": title,
-    //         "notes": inputList
-    //     };
-    //     notesArray.push(data);
-    //     console.log("notesArray", notesArray);
-    //     localStorage.setItem("notes", JSON.stringify(notesArray));
-    //     setTitle(e.target.value)
-    // }
-    // const handleAddClick = () => {  
-    //     setInputList([...inputList,{ id: uuidv4() ,  noteTitle: '', amount: '', status: false }])
-    // };
 
     const navigate = useNavigate();
     const handleInputChange = (e, index) => {
@@ -89,28 +39,9 @@ function UpdateNotes() {
         const list = [...inputList];
         list[index][name] = value;
         setInputList(list);
-
-        let notesArray = localStorage.getItem('notes') ? JSON.parse(localStorage.getItem('notes')) : [];
-        let data = {
-            "id": uuidv4(),
-            "title": title,
-            "notes": inputList
-        }
-        notesArray.push(data);
-        localStorage.setItem("notes", JSON.stringify(notesArray));
     };
 
     const titleChange = (e) => {
-        let notesArray = [];
-
-        let data = {
-            "id": uuidv4(),
-            "title": title,
-            "notes": inputList
-        };
-        notesArray.push(data);
-        console.log("notesArray", notesArray);
-        localStorage.setItem("notes", JSON.stringify(notesArray));
         setTitle(e.target.value)
     }
 
@@ -124,24 +55,29 @@ function UpdateNotes() {
 
     // handle click event of the Add button
     const handleAddClick = () => {
-        setInputList([...inputList, { id: uuidv4(), 'noteTitle': '', 'amount': '', 'status': false }])
+        setInputList([...inputList, {/* id: uuidv4(),*/ 'noteTitle': '', 'amount': '', 'status': false }])
     };
 
-    const _addNote = () => {
-
-
-        // let notesArray = localStorage.getItem('notes');
-        // let data = {
-        //     "id": uuidv4(),
-        //     "title": title,
-        //     "notes": inputList
-        // }
-        // notesArray.push(data);
-        // localStorage.setItem("notes", JSON.stringify(notesArray));
-
-
+    const _updateNote = (id) => {
+        const _notes = JSON.parse(localStorage.getItem("notes"));
+        let  arr = [];
+        for(let i = 0; i < _notes.length; i++) {
+            if(_notes[i].id === noteId){
+                arr.push({
+                    "id": noteId,
+                    "title": title,
+                    "notes": inputList
+                })
+               } else {
+                arr.push(_notes[i]);
+               }
+        }
+  
+        localStorage.setItem("notes", JSON.stringify(arr));
         navigate('/');
     }
+
+
 
     return (
         <>
@@ -160,8 +96,8 @@ function UpdateNotes() {
                         </div>
                     </div>
                     <Navbar style={{ padding: '12px 12px 0px 0px', justifyContent: 'flexSart' }}>
-                        <Container onClick={_addNote}>
-                            <ArrowBack />
+                        <Container>
+                            <ArrowBack  onClick={_updateNote}/>
                             <p>Update Notes</p>
                         </Container>
                     </Navbar>

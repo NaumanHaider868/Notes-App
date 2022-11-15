@@ -8,7 +8,7 @@ import { Navbar, Container } from 'react-bootstrap';
 function Notes() {
     const navigate = useNavigate();
     const [notesArray, setNotesArray] = useState(JSON.parse(localStorage.getItem('notes')) || []);
-    const [search,setSearch] = useState('');
+    const [search, setSearch] = useState('');
     useEffect(() => {
         if (localStorage.getItem('notes')) {
             setNotesArray(JSON.parse(localStorage.getItem('notes')));
@@ -17,9 +17,9 @@ function Notes() {
     useEffect(() => {
         localStorage.setItem("notes", JSON.stringify(notesArray));
     }, [notesArray]);
-    
 
-    const editItem = (note,total) => {
+
+    const editItem = (note, total) => {
         navigate('/updateNotes', { state: note, sum: total });
     }
     const deleteItem = (index) => {
@@ -29,14 +29,14 @@ function Notes() {
         setNotesArray(newTodos);
     }
     const searchValue = useRef();
-    const searchHandler= (e) => {
+    const searchHandler = (e) => {
         setSearch(searchValue.current.value)
-        if(search !== ''){
-            const list = notesArray.filter((i)=>{
+        if (search !== '') {
+            const list = notesArray.filter((i) => {
                 return Object.values(i)
-                .join(' ')
-                .toLowerCase()
-                .includes(search.toLowerCase());
+                    .join(' ')
+                    .toLowerCase()
+                    .includes(search.toLowerCase());
             });
             // setSearch(list)
         }
@@ -76,17 +76,17 @@ function Notes() {
                                                 <div className='title-head'>
                                                     <b>{note.title}</b>
                                                 </div>
-                                                    <div class="dropdown title-icon">
-                                                        <button class="btn dropdown-toggle title-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                                            <MoreVert />
-                                                        </button>
-                                                        <ul class="dropdown-menu">
-                                                            <li><a class="dropdown-item" onClick={() => editItem(note,total)}>Edit</a></li>
-                                                            <li><a class="dropdown-item" delItem={note} onClick={() => deleteItem(index)}>Delete</a></li>
-                                                            <li><a class="dropdown-item" href='#'>Share</a></li>
-                                                        </ul>
-                                                    </div>
-                                                
+                                                <div class="dropdown title-icon">
+                                                    <button class="btn dropdown-toggle title-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                        <MoreVert />
+                                                    </button>
+                                                    <ul class="dropdown-menu">
+                                                        <li><a class="dropdown-item" onClick={() => editItem(note, total)}>Edit</a></li>
+                                                        <li><a class="dropdown-item" /*delItem={note}*/ onClick={() => deleteItem(index)}>Delete</a></li>
+                                                        <li><a class="dropdown-item" href='#'>Share</a></li>
+                                                    </ul>
+                                                </div>
+
                                                 {/* <MoreVert /></p> */}
                                             </div>
                                             <div className='box-content'>
@@ -94,7 +94,7 @@ function Notes() {
                                                     return (
                                                         <React.Fragment>
                                                             <div className='data' style={{ display: 'flex' }}>
-                                                                <input type='checkbox'/>
+                                                                <input type='checkbox' checked={item.checked} />
                                                                 <p style={{ paddingTop: '0px', marginBottom: '0', paddingLeft: '4px' }}>{item.noteTitle}</p>
                                                                 <p style={{ paddingTop: '0px', marginBottom: '0', paddingLeft: '14px' }}>{item.amount}</p>
                                                             </div>

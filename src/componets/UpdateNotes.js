@@ -21,17 +21,16 @@ function UpdateNotes() {
     const [inputList, setInputList] = useState([{ /*id: uuidv4(),*/ 'noteTitle': '', 'amount': '',/*'status': false,*/ 'checked': false }]);
     const [title, setTitle] = useState("");
     const [total, setTotal] = useState(0);
-    const [noteId, setNoteId] = useState("");
+    const [noteId , setNoteId] = useState("");
 
     useEffect(() => {
         setInputList(state.notes);
         setTitle(state.title);
         setNoteId(state.id);
-        let sum = state.notes.reduce(function (prev, current) {
-            return prev + +current.amount
-        }, 0);
+        let sum = state.notes.reduce(function(prev, current) {
+            return prev+ +current.amount
+          }, 0);
         setTotal(sum);
-        // setTotal(sum);
     }, [])
     const date = new Date().toLocaleDateString();
     const time = new Date().toLocaleTimeString();
@@ -48,66 +47,89 @@ function UpdateNotes() {
         setTitle(e.target.value)
     }
 
-    // handle click event of the Remove button
+
     const handleRemoveClick = (index) => {
         const list = [...inputList];
         list.splice(index, 1);
         setInputList(list);
+        // let sum = await inputList.reduce((prev, current)=> {
+        //     return prev - -+current.amount
+        // }, 0);
+        // setTotal(sum);
+        // console.log(sum)
     }
 
 
-    // handle click event of the Add button
     const handleAddClick = () => {
-        setInputList([...inputList, {/* id: uuidv4(),*/ 'noteTitle': '', 'amount': '',/*'status': false,*/ 'checked': false }])
+        setInputList([...inputList, { id: uuidv4(), 'noteTitle': '', 'amount': '', /*'status': false,*/'checked': false }]);
+        // setInputList([...inputList, {/* id: uuidv4(),*/ 'noteTitle': '', 'amount': '',/*'status': false,*/ 'checked': false }])
     };
 
     const handleStatus = (id) => {
-        // setIsChecked(!isChecked);
-        // console.log(!isChecked)
-        const prevState = [...inputList];
-        setInputList(
-            prevState.map((d) => (d.id === id ? { ...d, checked: !d.checked } : d))
-        );
-        console.log(prevState)
-        // const newVal = inputList.map((item) => {
-        //     if (item.id === id) {
-        //       return {
-        //         ...item,
-        //         checked: !item.checked,
-        //       };
-        //     } else {
-        //       return {
-        //         ...item,
-        //       };
-        //     }
-        //   });
-        //   console.log('data',newVal)
-        //   setInputList(newVal);
-    }
+        // const prevState = [...inputList];
+        // setInputList(
+        //     prevState.map((d) => (d.id === id ? { ...d, checked: !d.checked } : d))
+        // );
+        // console.log(prevState);
 
-    const totalAdd = () => {
-        let sum = inputList.reduce(function (prev, current) {
-            return prev + +current.amount
-        }, 0);
-        setTotal(sum);
-        //   console.log(sum)
-    }
+        const newVal = inputList.map((item) => {
+            if (item.id === id) {
+              return {
+                ...item,
+                checked: !item.checked,
+              };
+            } else {
+              return {
+                ...item,
+              };
+            }
+          });
+          console.log(newVal)
+          setInputList(newVal);
+        }
 
+        const totalAdd = () => {
+            let sum = inputList.reduce(function(prev, current) {
+                return prev+ +current.amount
+              }, 0);
+              setTotal(sum);
+            //   console.log(sum)
+        }
+        const totalSub = (x, i) => {
+
+            let obj = inputList.find(o => o.id === x.id);
+
+            // console.log('subm', obj);
+            setTotal(total - obj.amount);
+            // setTotal(inputList.reduce((prev, current)=> {
+            //         return prev - -+current.amount
+            //     }, 0));
+            // setTotal((pre) => {
+            //     pre.inputList.reduce((prev, current)=> {
+            //         return prev - -+current.amount
+            //     }, 0);
+            // });
+
+            // let sum = [...inputList];
+            // let result = inputList.reduce((a, b) => a - -+b.amount);
+            // console.log(result);
+            // setTotal(result)
+        }
     const _updateNote = (id) => {
         const _notes = JSON.parse(localStorage.getItem("notes"));
-        let arr = [];
-        for (let i = 0; i < _notes.length; i++) {
-            if (_notes[i].id === noteId) {
+        let  arr = [];
+        for(let i = 0; i < _notes.length; i++) {
+            if(_notes[i].id === noteId){
                 arr.push({
                     "id": noteId,
                     "title": title,
                     "notes": inputList
                 })
-            } else {
+               } else {
                 arr.push(_notes[i]);
-            }
+               }
         }
-
+  
         localStorage.setItem("notes", JSON.stringify(arr));
         navigate('/');
         console.log(total)
@@ -133,7 +155,7 @@ function UpdateNotes() {
                     </div>
                     <Navbar style={{ padding: '12px 12px 0px 0px', justifyContent: 'flexSart' }}>
                         <Container>
-                            <ArrowBack onClick={_updateNote} />
+                            <ArrowBack  onClick={_updateNote}/>
                             <p>Update Notes</p>
                         </Container>
                     </Navbar>
@@ -147,8 +169,10 @@ function UpdateNotes() {
                                 <p style={{ color: 'black', marginLeft: '15px' }}>Sum : {total === 0 ? '' : total}</p>
                                 {inputList.map((x, i) => {
                                     return (
-                                        <div className={`${x.checked ? "head2" : "head"}`} key={i} style={{ display: 'flex', justifyContent: 'flexSart', marginTop: '10px' }}>
+                                        <div /*className='head'*/ className={`${x.checked ? "head2" : "head"}`} key={i} style={{ display: 'flex', justifyContent: 'flexSart', marginTop: '10px' }}>
+                                            {/* <div className="head" key={i} style={{ display: 'flex', justifyContent: 'flexSart', marginTop: '10px' }}> */}
                                             <div className='inputs'>
+                                            {/* {inputList.checked === false  && <input type='checkbox' name='status' checked={x.checked} onClick={(e) => handleStatus(x.id)} />} */}
                                                 <input type='checkbox' name='checked' checked={x.checked} onClick={(e) => handleStatus(x.id)} />
                                                 <input type='text' name='noteTitle' className='note-input' placeholder='Enter Notes' defaultValue={x.noteTitle} onChange={e => handleInputChange(e, i)} />
                                                 <div className='date-time'>
@@ -156,8 +180,8 @@ function UpdateNotes() {
                                                 </div>
                                             </div>
                                             <div className='amount-icon'>
-                                                <input type='text' placeholder='Amount' name='amount' className='amount' defaultValue={x.amount} onChange={e => { handleInputChange(e, i); totalAdd() }} />
-                                                <Close onClick={() => handleRemoveClick(i)} />
+                                                <input type='text' placeholder='Amount' name='amount' className='amount' defaultValue={x.amount} onChange={e => {handleInputChange(e, i); totalAdd()}} />
+                                                <Close onClick={() => {handleRemoveClick(i); totalSub(x, i)}} />
                                             </div>
                                         </div>
                                     );

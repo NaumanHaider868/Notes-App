@@ -127,12 +127,14 @@
 .head2 .note-input {
     text-decoration: line-through;
     border: none;
+    background: #fff !important;
     margin-left: 5px;
     width: 75px;
 }
 
 .head2 .note-input:focus {
     outline: none;
+    background: #fff !important;
     border-bottom: 1px solid #ccc;
 }
 
@@ -148,6 +150,7 @@
     border: none;
     text-decoration: line-through;
     width: 50px;
+    background: #fff !important;
 }
 
 .head2 .amount:focus {
@@ -175,10 +178,12 @@
     border: none;
     margin-left: 5px;
     width: 75px;
+    background: #fff !important;
 }
 
 .head .note-input:focus {
     outline: none;
+    background: #fff !important;
     border-bottom: 1px solid #ccc;
 }
 
@@ -199,6 +204,7 @@
 .amount {
     border: none;
     width: 50px;
+    background: #fff !important;
 }
 
 .amount:focus {

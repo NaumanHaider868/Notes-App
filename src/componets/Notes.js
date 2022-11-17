@@ -9,6 +9,8 @@ function Notes() {
     const navigate = useNavigate();
     const [notesArray, setNotesArray] = useState(JSON.parse(localStorage.getItem('notes')) || []);
     const [search, setSearch] = useState('');
+    // const [searchInput, setSearchInput] = useState('');
+    // const [filteredResults, setFilteredResults] = useState([]);
     useEffect(() => {
         if (localStorage.getItem('notes')) {
             setNotesArray(JSON.parse(localStorage.getItem('notes')));
@@ -28,9 +30,9 @@ function Notes() {
         // localStorage.removeItem("notes");
         setNotesArray(newTodos);
     }
-    const searchValue = useRef();
-    const searchHandler = (e) => {
-        setSearch(searchValue.current.value)
+    const searchValue = useRef();    
+    const searchHandler = (e,searchValue) => {
+        setSearch(e.target.value)
         if (search !== '') {
             const list = notesArray.filter((i) => {
                 return Object.values(i)
@@ -38,8 +40,21 @@ function Notes() {
                     .toLowerCase()
                     .includes(search.toLowerCase());
             });
-            // setSearch(list)
+            setSearch(list)
         }
+        
+        // console.log(searchValue)
+        // // setSearchInput(searchValue)
+        // // if (searchInput !== '') {
+        // //     const filteredData = notesArray.filter((item) => {
+        // //         return Object.values(item).join('').toLowerCase().includes(searchInput.toLowerCase())
+        // //     })
+        // //     setFilteredResults(filteredData)
+        // // }
+        // // else{
+        // //     setFilteredResults(notesArray)
+        // // }
+
     }
     return (
         <div>
@@ -65,7 +80,7 @@ function Notes() {
                     </Navbar>
                     <div className='main-content'>
                         <div className='inputField'>
-                            <input placeholder='Search' ref={searchValue} value={search} onChange={searchHandler} /><Search />
+                            <input placeholder='Search' /*ref={searchValue}*/ /*value={search}*/ onChange={(e) => setSearch(e.target.value)} /><Search />
                         </div>
                         <div className='row'>
                             {

@@ -44,6 +44,27 @@ function AddNote() {
         //   console.log(sum)
     }
 
+    const totalSub = (x, i) => {
+
+        let obj = inputList.find(o => o.id === x.id);
+
+        // console.log('subm', obj);
+        setTotal(total - obj.amount);
+        // setTotal(inputList.reduce((prev, current)=> {
+        //         return prev - -+current.amount
+        //     }, 0));
+        // setTotal((pre) => {
+        //     pre.inputList.reduce((prev, current)=> {
+        //         return prev - -+current.amount
+        //     }, 0);
+        // });
+
+        // let sum = [...inputList];
+        // let result = inputList.reduce((a, b) => a - -+b.amount);
+        // console.log(result);
+        // setTotal(result)
+    }
+
     // useEffect(()=>{
     //     const storedTodos = (JSON.parse(localStorage.getItem("notes")) || []);
     //     setNotesArray(storedTodos);
@@ -53,47 +74,46 @@ function AddNote() {
     //     localStorage.setItem("notes",JSON.stringify(notesArray));  
     //    },[notesArray]);
 
-    // handle click event of the Remove button
+
     const handleRemoveClick = (index) => {
         const list = [...inputList];
         list.splice(index, 1);
         setInputList(list);
-        let sum = inputList.reduce(function (prev, current) {
-            return prev - -+current.amount
-        }, 0);
-        setTotal(sum);
-        console.log(sum)
+        // let sum = inputList.reduce(function (prev, current) {
+        //     return prev - -+current.amount
+        // }, 0);
+        // setTotal(sum);
+        // console.log(sum)
     }
 
 
-    // handle click event of the Add button
+
     const handleAddClick = () => {
         setInputList([...inputList, { id: uuidv4(), 'noteTitle': '', 'amount': '', /*'status': false,*/'checked': false }])
     };
 
 
     const handleStatus = (id) => {
-        // setIsChecked(!isChecked);
-        // console.log(!isChecked)
-        const prevState = [...inputList];
-        setInputList(
-            prevState.map((d) => (d.id === id ? { ...d, checked: !d.checked } : d))
-        );
-        console.log(prevState)
-        // const newVal = inputList.map((item) => {
-        //     if (item.id === id) {
-        //       return {
-        //         ...item,
-        //         checked: !item.checked,
-        //       };
-        //     } else {
-        //       return {
-        //         ...item,
-        //       };
-        //     }
-        //   });
-        //   console.log(newVal)
-        //   setInputList(newVal);
+        // const prevState = [...inputList];
+        // setInputList(
+        //     prevState.map((d) => (d.id === id ? { ...d, checked: !d.checked } : d))
+        // );
+        // console.log(prevState);
+
+        const newVal = inputList.map((item) => {
+            if (item.id === id) {
+              return {
+                ...item,
+                checked: !item.checked,
+              };
+            } else {
+              return {
+                ...item,
+              };
+            }
+          });
+          console.log(newVal)
+          setInputList(newVal);
     }
 
     const _addNote = () => {
@@ -152,7 +172,7 @@ function AddNote() {
                                             </div>
                                             <div className='amount-icon'>
                                                 <input type='text' placeholder='Amount' name='amount' className='amount' value={x.amount} onChange={e => { handleInputChange(e, i); totalAdd() }} />
-                                                <Close onClick={() => handleRemoveClick(i)} />
+                                                <Close onClick={() => {handleRemoveClick(i); totalSub(x, i)}} />
                                             </div>
                                         </div>
                                     );

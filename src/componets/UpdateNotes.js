@@ -98,7 +98,7 @@ function UpdateNotes() {
         const totalSub = (x, i) => {
 
             let obj = inputList.find(o => o.id === x.id);
-
+            
             // console.log('subm', obj);
             setTotal(total - obj.amount);
             // setTotal(inputList.reduce((prev, current)=> {

@@ -30,18 +30,18 @@ function Notes() {
         // localStorage.removeItem("notes");
         setNotesArray(newTodos);
     }
-    const searchValue = useRef();    
-    const searchHandler = (e,searchValue) => {
-        setSearch(e.target.value)
-        if (search !== '') {
-            const list = notesArray.filter((i) => {
-                return Object.values(i)
-                    .join(' ')
-                    .toLowerCase()
-                    .includes(search.toLowerCase());
-            });
-            setSearch(list)
-        }
+    // const searchValue = useRef();    
+    // const searchHandler = (e,searchValue) => {
+        // setSearch(e.target.value)
+        // if (search !== '') {
+        //     const list = notesArray.filter((i) => {
+        //         return Object.values(i)
+        //             .join(' ')
+        //             .toLowerCase()
+        //             .includes(search.toLowerCase());
+        //     });
+        //     setSearch(list)
+        // }
         
         // console.log(searchValue)
         // // setSearchInput(searchValue)
@@ -55,7 +55,10 @@ function Notes() {
         // //     setFilteredResults(notesArray)
         // // }
 
-    }
+    // }
+
+
+
     return (
         <div>
             <div className='main'>
@@ -80,11 +83,17 @@ function Notes() {
                     </Navbar>
                     <div className='main-content'>
                         <div className='inputField'>
-                            <input placeholder='Search' /*ref={searchValue}*/ /*value={search}*/ onChange={(e) => setSearch(e.target.value)} /><Search />
+                            <input placeholder='Search' /*ref={searchValue}*/ /*value={search}*/ onChange={(e)=>{setSearch(e.target.value)}} /><Search />
                         </div>
                         <div className='row'>
                             {
-                                notesArray.map((note, index, total) => {
+                                notesArray.filter((notes)=>{
+                                    if(search == ''){
+                                        return notes
+                                    }else if(notes.title.toLowerCase().includes(search.toLowerCase())){
+                                        return notes
+                                    }
+                                }).map((note, index, total) => {
                                     return (
                                         <div className='col-md-6 box'>
                                             <div className='head'>
@@ -134,14 +143,6 @@ function Notes() {
                                     )
                                 })
                             }
-                            {/* <div className='col-md-4 box2'>
-                                <div className='head'>
-
-                                </div>
-                                <div className='box-content'>
-
-                                </div>
-                            </div> */}
                             <Link to='addNote'>
                                 <div className='bottom-btn'>
                                     <button className='btn btn-bottom'>

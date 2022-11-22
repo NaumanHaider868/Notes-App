@@ -24,16 +24,14 @@ function AddNote() {
     const [inputList, setInputList] = useState([{ id: uuidv4(), 'noteTitle': '', 'amount': '', /*'status': false,*/ 'checked': false }]);
     const [title, setTitle] = useState("");
     const [total, setTotal] = useState(0);
-    // const [isChecked, setIsChecked] = useState(false);
     const navigate = useNavigate();
-    // const [show, setShow] = useState(false);
+    const [show, setShow] = useState(false);
 
     const handleInputChange = (e, index) => {
         const { name, value } = e.target;
         const list = [...inputList];
         list[index][name] = value;
         setInputList(list);
-
     };
 
     const totalAdd = () => {
@@ -41,28 +39,11 @@ function AddNote() {
             return prev + +current.amount
         }, 0);
         setTotal(sum);
-        //   console.log(sum)
     }
 
     const totalSub = (x, i) => {
-
         let obj = inputList.find(o => o.id === x.id);
-
-        // console.log('subm', obj);
         setTotal(total - obj.amount);
-        // setTotal(inputList.reduce((prev, current)=> {
-        //         return prev - -+current.amount
-        //     }, 0));
-        // setTotal((pre) => {
-        //     pre.inputList.reduce((prev, current)=> {
-        //         return prev - -+current.amount
-        //     }, 0);
-        // });
-
-        // let sum = [...inputList];
-        // let result = inputList.reduce((a, b) => a - -+b.amount);
-        // console.log(result);
-        // setTotal(result)
     }
 
     // useEffect(()=>{
@@ -79,45 +60,32 @@ function AddNote() {
         const list = [...inputList];
         list.splice(index, 1);
         setInputList(list);
-        // let sum = inputList.reduce(function (prev, current) {
-        //     return prev - -+current.amount
-        // }, 0);
-        // setTotal(sum);
-        // console.log(sum)
     }
-
-
 
     const handleAddClick = () => {
         setInputList([...inputList, { id: uuidv4(), 'noteTitle': '', 'amount': '', /*'status': false,*/'checked': false }])
     };
 
 
-    const handleStatus = (id) => {
-        // const prevState = [...inputList];
-        // setInputList(
-        //     prevState.map((d) => (d.id === id ? { ...d, checked: !d.checked } : d))
-        // );
-        // console.log(prevState);
-
+    const handleStatus = (id, x) => {
         const newVal = inputList.map((item) => {
             if (item.id === id) {
-              return {
-                ...item,
-                checked: !item.checked,
-              };
+                return {
+                    ...item,
+                    checked: !item.checked,
+                };
             } else {
-              return {
-                ...item,
-              };
+                return {
+                    ...item,
+                };
             }
-          });
-          console.log(newVal)
-          setInputList(newVal);
+        });
+
+        console.log(newVal)
+        setInputList(newVal);
     }
 
     const _addNote = () => {
-
         if (title !== '' || inputList[0].noteTitle !== '' || inputList[0].amount !== '') {
             let notesArray = localStorage.getItem('notes') ? JSON.parse(localStorage.getItem('notes')) : [];
             let data = {
@@ -128,7 +96,6 @@ function AddNote() {
             notesArray.push(data);
             localStorage.setItem("notes", JSON.stringify(notesArray));
         };
-
         navigate('/');
     }
     return (
@@ -160,50 +127,59 @@ function AddNote() {
                         <div className='row'>
                             <div className='col-md-12'>
                                 <p style={{ color: 'black', marginLeft: '15px' }}>Sum : {total === 0 ? '' : total}</p>
-                                {inputList.map((x, i) => {
-                                    return (
-                                        <div className={`${x.checked ? "head2" : "head"}`} key={i} style={{ display: 'flex', justifyContent: 'flexSart', marginTop: '10px' }}>
-                                            <div className='inputs'>
-                                                <input type='checkbox' name='status' checked={x.checked} onClick={(e) => handleStatus(x.id)} />
-                                                <input type='text' name='noteTitle' className='note-input' placeholder='Enter Notes' value={x.noteTitle} onChange={e => handleInputChange(e, i)} />
-                                                <div className='date-time'>
-                                                    {date} {time}
-                                                </div>
-                                            </div>
-                                            <div className='amount-icon'>
-                                                <input type='text' placeholder='Amount' name='amount' className='amount' value={x.amount} onChange={e => { handleInputChange(e, i); totalAdd() }} />
-                                                <Close onClick={() => {handleRemoveClick(i); totalSub(x, i)}} />
-                                            </div>
-                                        </div>
-                                    );
+                                {
+                                            inputList.map((x, i) => {
+                                                return (
+                                                    <>
+                                                        {x.checked === false
+                                                            && <div className={`${x.checked ? "head2" : "head"}`} key={i} style={{ /*display: 'flex',*/ justifyContent: 'flexSart', marginTop: '10px' }}>
+                                                                <div className='inputs'>
+                                                                    <input type='checkbox' name='status' checked={x.checked} onClick={(e) => handleStatus(x.id,x)} />
+                                                                    <input type='text' name='noteTitle' className='note-input' placeholder='Enter Notes' value={x.noteTitle} onChange={e => handleInputChange(e, i)} />
+                                                                    <div className='date-time'>
+                                                                        {date} {time}
+                                                                    </div>
+                                                                </div>
+                                                                <div className='amount-icon'>
+                                                                    <input type='text' placeholder='Amount' name='amount' className='amount' value={x.amount} onChange={e => { handleInputChange(e, i); totalAdd() }} />
+                                                                    <Close onClick={() => { handleRemoveClick(i); totalSub(x, i) }} />
+                                                                </div>
+                                                            </div>}
+                                                    </>
+                                                )
+                                            })
+                                        }
 
-                                })}
-
-                                {/* <button type="button" onClick={() => setShow(!show)} style={{ background: "#F06C24", color: "#fff", fontSize: "12px", border:'1px solid #fff', padding:'10px', marginLeft: "210px", marginTop: "10px" }}>
+                                <button type="button" onClick={() => setShow(!show)} style={{ background: "#F06C24", color: "#fff", fontSize: "12px", borderRadius: '20px', border: 'none', padding: '10px', marginLeft: "210px", marginTop: "10px" }}>
                                     {show === true ? 'Hide Archived' : 'Show Archived'}
                                 </button>
-                                {show && 
-                                
-        
-                                        <div className='head'style={{ display: 'flex', justifyContent: 'flexSart', marginTop: '10px' }}>
-                                            <div className='inputs'>
-                                                <input type='checkbox' />
-                                                <input type='text' name='note' className='note-input' placeholder='Enter Notes'  onChange={e => handleInputChange(e)} />
-                                                <div className='date-time'>
-                                                    {date} {time}
-                                                </div>
-                                            </div>
-                                            <div className='amount-icon'>
-                                                <input type='text' placeholder='Amount' name='amount' className='amount' onChange={e => handleInputChange(e)} />
-                                                <Close onClick={() => handleRemoveClick()} />
-                                            </div>
-                                        </div>
-                                    
-                                
-                                } */}
+                                {show &&
+                                    <>
+                                        {
+                                            inputList.map((x, i) => {
+                                                return (
+                                                    <>
+                                                    {/* <p style={{ color: 'black', marginLeft: '15px' }}>Sum : {x.checked ? {total} : ''}</p> */}
+                                                        {x.checked === true
+                                                            && <div className={`${x.checked ? "head2" : "head"}`} key={i} style={{ /*display: 'flex',*/ justifyContent: 'flexSart', marginTop: '10px' }}>
+                                                                <div className='inputs'>
+                                                                    <input type='checkbox' name='status' checked={x.checked} onClick={(e) => handleStatus(x.id)} />
+                                                                    <input type='text' name='noteTitle' className='note-input' placeholder='Enter Notes' value={x.noteTitle} onChange={e => handleInputChange(e, i)} />
+                                                                    <div className='date-time'>
+                                                                        {date} {time}
+                                                                    </div>
+                                                                </div>
+                                                                <div className='amount-icon'>
+                                                                    <input type='text' placeholder='Amount' name='amount' className='amount' value={x.amount} onChange={e => { handleInputChange(e, i); totalAdd() }} />
+                                                                    <Close onClick={() => { handleRemoveClick(i); totalSub(x, i) }} />
+                                                                </div>
+                                                            </div>}
+                                                    </>
+                                                )
+                                            })
+                                        }
+                                    </>}
 
-
-                                {/* <button>Show Data</button> */}
 
                                 <div className='btn-box' style={{ position: 'fixed', height: '49px', bottom: '34px', right: '450px', justifyContent: 'center', textAlign: 'center' }}>
                                     <button className='btn btn-note text-center' style={{ marginTop: '0' }} onClick={handleAddClick}>Add Note</button>

@@ -67,7 +67,7 @@ function AddNote() {
     };
 
 
-    const handleStatus = (id, x) => {
+    const handleStatus = (id) => {
         const newVal = inputList.map((item) => {
             if (item.id === id) {
                 return {

@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react'
+import _ from 'lodash';
 import { Link, useNavigate } from 'react-router-dom'
 import '../componets/notes.css';
 import { SignalCellularAlt, SignalWifi4Bar, Battery30, MoreVert, Search, Add } from '@mui/icons-material';
@@ -22,11 +23,25 @@ function Notes() {
     const editItem = (note, total) => {
         navigate('/updateNotes', { state: note, sum: total });
     }
-    const deleteItem = (index) => {
-        const newTodos = [...notesArray];
-        newTodos.splice(index, 1);
-        // localStorage.removeItem("notes");
-        setNotesArray(newTodos);
+    const deleteItem = (index, id) => {
+        console.log(id);
+        // const newTodos = [...notesArray];
+        // newTodos.splice(index, 1);
+        // // localStorage.removeItem("notes");
+        // setNotesArray(newTodos);
+
+        var array = [...notesArray];
+        const data =  _.remove(array, function(o) { return o.id !== id; });
+        // var data = _.slice(array,id);
+        console.log('data', data);
+        setNotesArray(data);
+
+
+
+        // var myArray = [...notesArray];
+        // var data = _.remove(myArray,x=>x.id === id);
+        // console.log(data);
+        // setNotesArray(data);
     }
 
     return (
@@ -63,9 +78,9 @@ function Notes() {
                                     } else if (notes.title.toLowerCase().includes(search.toLowerCase())) {
                                         return notes
                                     }
-                                }).map((note, index, total) => {
+                                }).map((note, index, total, id) => {
                                     return (
-                                        <div className='col-md-6 box'>
+                                        <div className='col-md-6 box' id='id'>
                                             <div className='head'>
                                                 <div className='title-head'>
                                                     <b>{note.title}</b>
@@ -76,7 +91,7 @@ function Notes() {
                                                     </button>
                                                     <ul class="dropdown-menu">
                                                         <li><a class="dropdown-item" onClick={() => editItem(note, total)}>Edit</a></li>
-                                                        <li><a class="dropdown-item" /*delItem={note}*/ onClick={() => deleteItem(index)}>Delete</a></li>
+                                                        <li><a class="dropdown-item" /*delItem={note}*/ onClick={() => deleteItem(index,note.id)}>Delete</a></li>
                                                         <li><a class="dropdown-item" href='#'>Share</a></li>
                                                     </ul>
                                                 </div>

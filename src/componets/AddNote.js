@@ -21,7 +21,7 @@ function AddNote() {
 
     const date = new Date().toLocaleDateString();
     const time = new Date().toLocaleTimeString();
-    const [inputList, setInputList] = useState([{ id: uuidv4(), 'noteTitle': '', 'amount': '', /*'status': false,*/ 'checked': false }]);
+    const [inputList, setInputList] = useState([{ id: uuidv4(), 'noteTitle': '', 'amount': '', 'checked': false }]);
     const [title, setTitle] = useState("");
     const [total, setTotal] = useState(0);
     const navigate = useNavigate();
@@ -63,7 +63,7 @@ function AddNote() {
     }
 
     const handleAddClick = () => {
-        setInputList([...inputList, { id: uuidv4(), 'noteTitle': '', 'amount': '', /*'status': false,*/'checked': false }])
+        setInputList([...inputList, { id: uuidv4(), 'noteTitle': '', 'amount': '', 'checked': false }])
     };
 
 
@@ -163,7 +163,7 @@ function AddNote() {
                                                         {x.checked === true
                                                             && <div className={`${x.checked ? "head2" : "head"}`} key={i} style={{ /*display: 'flex',*/ justifyContent: 'flexSart', marginTop: '10px' }}>
                                                                 <div className='inputs'>
-                                                                    <input type='checkbox' name='status' checked={x.checked} onClick={(e) => handleStatus(x.id)} />
+                                                                    <input type='checkbox' name='status' checked={x.checked} onClick={() => handleStatus(x.id)} />
                                                                     <input type='text' name='noteTitle' className='note-input' placeholder='Enter Notes' value={x.noteTitle} onChange={e => handleInputChange(e, i)} />
                                                                     <div className='date-time'>
                                                                         {date} {time}

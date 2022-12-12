@@ -35,13 +35,6 @@ function Notes() {
         // var data = _.slice(array,id);
         console.log('data', data);
         setNotesArray(data);
-
-
-
-        // var myArray = [...notesArray];
-        // var data = _.remove(myArray,x=>x.id === id);
-        // console.log(data);
-        // setNotesArray(data);
     }
 
     return (
@@ -78,9 +71,9 @@ function Notes() {
                                     } else if (notes.title.toLowerCase().includes(search.toLowerCase())) {
                                         return notes
                                     }
-                                }).map((note, index, total, id) => {
+                                }).map((note, index, total) => {
                                     return (
-                                        <div className='col-md-6 box' id='id'>
+                                        <div className='col-md-6 box' key={note.id}>
                                             <div className='head'>
                                                 <div className='title-head'>
                                                     <b>{note.title}</b>
@@ -132,3 +125,5 @@ function Notes() {
 }
 
 export default Notes
+
+

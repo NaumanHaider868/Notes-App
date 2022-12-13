@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react'
-import _ from 'lodash';
+import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom'
 import '../componets/notes.css';
 import { SignalCellularAlt, SignalWifi4Bar, Battery30, MoreVert, Search, Add } from '@mui/icons-material';
@@ -8,9 +8,29 @@ import { Navbar, Container } from 'react-bootstrap';
 
 function Notes() {
     const navigate = useNavigate();
-    
+    const [notesArray, setNotesArray] = useState([]);
     const editItem = () => {
         navigate('/updateNotes');
+    }
+
+    useEffect(() => {
+        axios.get('http://foodapis.techenablers.info/api/notes')
+            .then((resp) => {
+                console.log('All Notes', resp.data.data.notes);
+                setNotesArray(resp.data.data.notes);
+            })
+    }, []);
+
+
+    const deleteItem = (index, id) => {
+        axios.delete(`http://foodapis.techenablers.info/api/notes/delete-note/${id}`)
+            .then((resp) => {
+                console.log("delete", resp)
+                // setNotesArray(resp)
+            })
+        const newTodos = [...notesArray];
+        newTodos.splice(index, 1);
+        setNotesArray(newTodos);
     }
 
     return (
@@ -40,11 +60,14 @@ function Notes() {
                             <input placeholder='Search' /><Search />
                         </div>
                         <div className='row'>
-                            
+                            {
+                                notesArray.map((x, index) => {
+                                    return (
+
                                         <div className='col-md-6 box'>
                                             <div className='head'>
                                                 <div className='title-head'>
-                                                    <b>title</b>
+                                                    <b>{x.title}</b>
                                                 </div>
                                                 <div class="dropdown title-icon">
                                                     <button class="btn dropdown-toggle title-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -52,7 +75,7 @@ function Notes() {
                                                     </button>
                                                     <ul class="dropdown-menu">
                                                         <li><a class="dropdown-item" onClick={() => editItem()}>Edit</a></li>
-                                                        <li><a class="dropdown-item" /*delItem={note}*/>Delete</a></li>
+                                                        <li><a class="dropdown-item" onClick={() => deleteItem(index, x.id)}>Delete</a></li>
                                                         <li><a class="dropdown-item" href='#'>Share</a></li>
                                                     </ul>
                                                 </div>
@@ -61,12 +84,17 @@ function Notes() {
                                                 
                                                             <div className='data' style={{ display: 'flex' }}>
                                                                 <input type='checkbox' />
-                                                                <p style={{ paddingTop: '0px', marginBottom: '0', paddingLeft: '4px' }}>noteTitle</p>
-                                                                <p style={{ paddingTop: '0px', marginBottom: '0', paddingLeft: '14px' }}>amount</p>
+                                                                <p style={{ paddingTop: '0px', marginBottom: '0', paddingLeft: '4px' }}>{x.name}</p>
+                                                                <p style={{ paddingTop: '0px', marginBottom: '0', paddingLeft: '14px' }}>{x.amount}</p>
                                                             </div>
-                                                        
+                                                       
                                             </div>
+
                                         </div>
+
+                                    )
+                                })
+                            }
 
                             <Link to='addNote'>
                                 <div className='bottom-btn'>

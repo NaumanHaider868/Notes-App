@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { v4 as uuidv4 } from 'uuid';
-
+import axios from 'axios';
 import { useNavigate } from 'react-router-dom'
 
 import '../componets/update.css';
@@ -21,28 +20,40 @@ function AddNote() {
 
     const date = new Date().toLocaleDateString();
     const time = new Date().toLocaleTimeString();
-    
+    const [inputList, setInputList] = useState([]);
+    const [title, setTitle] = useState();
+    const [name,setName] = useState();
+    const [amount,setAmount] = useState();
+    const [status,setStatus] = useState(1);
+    const [total, setTotal] = useState();
+
     const navigate = useNavigate();
 
-    
-
-    
-
-    
-
-
-
-    
-
-    
-
-
-   
-
-    const _addNote = () => {
-        
+    const _addNote = (e) => {
+        const apiUrl = 'http://foodapis.techenablers.info/api/notes/create-note';
+        axios.post(apiUrl,{
+            name,
+            title,
+            amount,
+            status
+          }).then((resp)=>{
+            console.log(resp.data.data);
+            setInputList(resp.data.data)
+          })
         navigate('/');
     }
+
+    // const totalAdd = () => {
+    //     let sum = inputList.reduce(function (prev, current) {
+    //         return prev + +current.amount
+    //     }, 0);
+    //     // setTotal(sum);
+    //     console.log(sum)
+    // }
+
+    const handleAddClick = () => {
+        setInputList([...inputList,{}]) 
+    };
     return (
         <>
             <div className='main'>
@@ -67,38 +78,40 @@ function AddNote() {
                     </Navbar>
                     <div className='main-content'>
                         <div className='inputField'>
-                            <input placeholder='Title' name='title'  />
+                            <input placeholder='Title' onChange={(e) => setTitle(e.target.value)} />
                         </div>
+
                         <div className='row'>
                             <div className='col-md-12'>
                                 <p style={{ color: 'black', marginLeft: '15px' }}>Sum : </p>
-                                 <div className="head" style={{ /*display: 'flex',*/ justifyContent: 'flexSart', marginTop: '10px' }}>
-                                                                <div className='inputs'>
-                                                                    <input type='checkbox' name='status'  />
-                                                                    <input type='text'  className='note-input' placeholder='Enter Notes' />
-                                                                    <div className='date-time'>
-                                                                        {date} {time}
-                                                                    </div>
-                                                                </div>
-                                                                <div className='amount-icon'>
-                                                                    <input type='text' placeholder='Amount' className='amount' />
-                                                                    <Close />
-                                                                </div>
-                                                            </div>
+                                {/* {total === 0 ? '' : total} */}
+                                <div className="head" style={{ /*display: 'flex',*/ justifyContent: 'flexSart', marginTop: '10px' }}>
+                                    <div className='inputs'>
+                                        <input type='checkbox' name='status' />
+                                        <input type='text' className='note-input' placeholder='Enter Notes' name='name' onChange={(e)=>setName(e.target.value)} />
+                                        <div className='date-time'>
+                                            {date} {time}
+                                        </div>
+                                    </div>
+                                    <div className='amount-icon'>
+                                        <input type='text' placeholder='Amount' className='amount' name='amount' onChange={(e)=> {setAmount(e.target.value); }} />
+                                        <Close />
+                                    </div>
+                                </div>
 
-                                <button type="button"  style={{ background: "#F06C24", color: "#fff", fontSize: "12px", borderRadius: '20px', border: 'none', padding: '10px', marginLeft: "210px", marginTop: "10px" }}>
-                                    
+                                <button type="button" style={{ background: "#F06C24", color: "#fff", fontSize: "12px", borderRadius: '20px', border: 'none', padding: '10px', marginLeft: "210px", marginTop: "10px" }}>
+
                                 </button>
-                                
+
 
 
                                 <div className='btn-box' style={{ position: 'fixed', height: '49px', bottom: '34px', right: '450px', justifyContent: 'center', textAlign: 'center' }}>
-                                    <button className='btn btn-note text-center' style={{ marginTop: '0' }} >Add Note</button>
+                                    <button className='btn btn-note text-center' style={{ marginTop: '0' }} onClick={handleAddClick}>Add Note</button>
                                 </div>
                             </div>
-                            {/* <div style={{ marginTop: 20 }}>{JSON.stringify(inputList)}</div> */}
-
                         </div>
+
+
                     </div>
                 </div>
             </div>

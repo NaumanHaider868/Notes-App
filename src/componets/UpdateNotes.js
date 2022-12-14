@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import { useNavigate, useLocation } from 'react-router-dom'
-import { v4 as uuidv4 } from 'uuid';
-
+import { useNavigate, useParams } from 'react-router-dom'
+import axios from 'axios';
 import '../componets/update.css';
 
 import {
@@ -16,34 +15,26 @@ import {
 import { Navbar, Container } from 'react-bootstrap';
 
 function UpdateNotes() {
-
-
-
+    const [notesArray,setNotesArray] = useState([]);
+    const [title, setTitle] = useState();
+    const [name, setName] = useState();
+    const [amount, setAmount] = useState();
     const date = new Date().toLocaleDateString();
     const time = new Date().toLocaleTimeString();
-
+    const param = useParams();
     const navigate = useNavigate();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     const _updateNote = () => {
-
-
         navigate('/');
     }
 
+    useEffect(()=>{
+        axios.get(`http://foodapis.techenablers.info/api/notes/${param.id}`)
+        .then((resp)=>{
+            console.log(resp)
+        }).catch((error)=>{
+            console.log(error)
+        })
+    },[])
 
 
     return (
@@ -71,28 +62,33 @@ function UpdateNotes() {
                     <div className='main-content'>
 
                         <div className='inputField'>
-                            <input placeholder='Title' />
+                            <input placeholder='Title' onChange={(e)=>setTitle(e.target.value)} />
                         </div>
                         <div className='row'>
                             <div className='col-md-12'>
                                 <p style={{ color: 'black', marginLeft: '15px' }}>Sum : </p>
-                                <div className="head" style={{ /*display: 'flex',*/ justifyContent: 'flexSart', marginTop: '10px' }}>
-                                    <div className='inputs'>
-                                        <input type='checkbox' />
-                                        <input type='text' className='note-input' placeholder='Enter Notes' />
-                                        <div className='date-time'>
-                                            {date} {time}
-                                        </div>
-                                    </div>
-                                    <div className='amount-icon'>
-                                        <input type='text' placeholder='Amount' className='amount' />
-                                        <Close />
-                                    </div>
-                                </div>
-
-                                <button type="button" style={{ background: "#F06C24", color: "#fff", fontSize: "12px", borderRadius: '20px', border: 'none', padding: '10px', marginLeft: "210px", marginTop: "10px" }}>
-                                </button>
-
+                                {/* {
+                                    notesArray.map((x, i) => {
+                                        return (
+                                            <> */}
+                                                <div className="head" style={{ /*display: 'flex',*/ justifyContent: 'flexSart', marginTop: '10px' }}>
+                                                    <div className='inputs'>
+                                                        <input type='checkbox' />
+                                                        <input type='text' className='note-input' placeholder='Enter Notes' defaultValue={name} name='name' onChange={(e) => setName(e.target.value)} />
+                                                        <div className='date-time'>
+                                                            {date} {time}
+                                                        </div>
+                                                    </div>
+                                                    <div className='amount-icon'>
+                                                        <input type='text' placeholder='Amount' className='amount' name='amount' defaultValue={amount} onChange={(e) => setAmount(e.target.value)} />
+                                                        <Close />
+                                                    </div>
+                                                </div>
+                                            {/* </>
+                                        )
+                                    })
+                                }
+                                 */}
 
 
                                 <div className='btn-box' style={{ position: 'fixed', height: '49px', bottom: '34px', right: '450px', justifyContent: 'center', textAlign: 'center' }}>

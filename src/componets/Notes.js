@@ -18,13 +18,13 @@ function Notes() {
         axios.get('http://foodapis.techenablers.info/api/notes')
             .then((resp) => {
                 console.log('All Notes', resp.data.data.notes);
+                // const res = resp.data.data.notes;
                 setNotesArray(resp.data.data.notes);
             })
     }, []);
 
-
     const deleteItem = (index, id) => {
-        axios.delete(`http://foodapis.techenablers.info/api/notes/delete-note/${id}`)
+        axios.delete(`http://foodapis.techenablers.info/api/notes/${id}`)
             .then((resp) => {
                 console.log("delete", resp)
                 // setNotesArray(resp)
@@ -81,15 +81,19 @@ function Notes() {
                                                     </ul>
                                                 </div>
                                             </div>
-                                            <div className='box-content'>
-
-                                                <div className='data' style={{ display: 'flex' }}>
-                                                    <input type='checkbox' />
-                                                    <p style={{ paddingTop: '0px', marginBottom: '0', paddingLeft: '4px' }}>{x.name}</p>
-                                                    <p style={{ paddingTop: '0px', marginBottom: '0', paddingLeft: '14px' }}>{x.amount}</p>
-                                                </div>
-
-                                            </div>
+                                            {x.checklists.map((item,i)=>{
+                                                return (
+                                                    <>
+                                                        <div className='box-content'>
+                                                            <div className='data' style={{ display: 'flex' }}>
+                                                                <input type='checkbox' checked={x.status} />
+                                                                <p style={{ paddingTop: '0px', marginBottom: '0', paddingLeft: '4px' }}>{item.name}</p>
+                                                                <p style={{ paddingTop: '0px', marginBottom: '0', paddingLeft: '14px' }}>{item.amount}</p>
+                                                            </div>
+                                                        </div>
+                                                    </>
+                                                )
+                                            })}
 
                                         </div>
 

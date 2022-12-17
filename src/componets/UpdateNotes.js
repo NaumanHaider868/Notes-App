@@ -3,38 +3,105 @@ import { useNavigate, useParams } from 'react-router-dom'
 import axios from 'axios';
 import '../componets/update.css';
 
-import {
-    SignalCellularAlt,
-    SignalWifi4Bar,
-    Battery30,
-    ArrowBack,
-    Close
-}
+import { SignalCellularAlt, SignalWifi4Bar, Battery30, ArrowBack, Close, Add }
     from '@mui/icons-material';
 
 import { Navbar, Container } from 'react-bootstrap';
 
 function UpdateNotes() {
-    const [notesArray,setNotesArray] = useState([]);
+    const [inputList, setInputList] = useState([]);
     const [title, setTitle] = useState();
     const [name, setName] = useState();
     const [amount, setAmount] = useState();
+    const [status,setStatus] = useState(false);
+    const [id,setId] = useState();
+    const [postid,setPostId] = useState();
     const date = new Date().toLocaleDateString();
     const time = new Date().toLocaleTimeString();
     const param = useParams();
+
     const navigate = useNavigate();
+
+    useEffect(() => {
+        axios.get(`http://foodapis.techenablers.info/api/notes/${param.id}`)
+            .then((resp) => {
+                console.log('update get',resp.data.data)
+                setTitle(resp.data.data.note.title)
+                setInputList(resp.data.data.note.checklists)
+            })
+    }, []);
+
     const _updateNote = () => {
+
+        let arr = [];
+
+        for(let i = 0; i < inputList.length; i++) {
+            arr.push({
+                "id": inputList[i].id,
+                "post_note_id": inputList[i].postId,
+                "name": inputList[i].name,
+                "amount": inputList[i].amount,
+                "status": inputList[i].status,
+            })
+        }
+
+        // const payload = {
+        //     arr
+        // }
+        axios.put(`http://foodapis.techenablers.info/api/notes/${param.id}`,{
+            title,
+            checklists:arr
+        })
+        .then((resp)=>{
+            // console.log('update data',resp.data.data.note)
+            setInputList(resp.data.data.note)
+        })
         navigate('/');
     }
+    const handleInputChange = (e, index) => {
+        const { name, value } = e.target;
+        const list = [...inputList];
+        list[index][name] = value;
+        setName(list);
+        setAmount(list)
+    };
 
-    useEffect(()=>{
-        axios.get(`http://foodapis.techenablers.info/api/notes/${param.id}`)
-        .then((resp)=>{
-            console.log(resp)
-        }).catch((error)=>{
-            console.log(error)
-        })
-    },[])
+    const handleAddClick = () => {
+        setInputList([...inputList, {id:id, name: '', amount: '', status : false }])
+    };
+
+    const handleRemoveClick = (index) => {
+        const list = [...inputList];
+        list.splice(index, 1);
+        setInputList(list);
+    }
+
+    const AddStauts = (id) => {
+        // axios.post(`http://foodapis.techenablers.info/api/notes/${id}`,{
+        //     status:status
+        // })
+        //     .then((resp) => {
+        //         console.log(resp.data.data.notestatus);
+        //         // setStatus(resp.data.data.notestatus.status)
+        //     }) 
+        // console.log(id)
+
+        const newVal = inputList.map((item) => {
+            if (item.id === id) {
+                return {
+                    ...item,
+                    status: !item.status,
+                };
+            } else {
+                return {
+                    ...item,
+                };
+            }
+        });
+        console.log(newVal)
+        setStatus(newVal);
+        setInputList(newVal)
+    }
 
 
     return (
@@ -62,37 +129,39 @@ function UpdateNotes() {
                     <div className='main-content'>
 
                         <div className='inputField'>
-                            <input placeholder='Title' onChange={(e)=>setTitle(e.target.value)} />
+                            <input placeholder='Title' defaultValue={title} name='title' onChange={(e) => setTitle(e.target.value)} />
                         </div>
                         <div className='row'>
                             <div className='col-md-12'>
                                 <p style={{ color: 'black', marginLeft: '15px' }}>Sum : </p>
-                                {/* {
-                                    notesArray.map((x, i) => {
-                                        return (
-                                            <> */}
-                                                <div className="head" style={{ /*display: 'flex',*/ justifyContent: 'flexSart', marginTop: '10px' }}>
-                                                    <div className='inputs'>
-                                                        <input type='checkbox' />
-                                                        <input type='text' className='note-input' placeholder='Enter Notes' defaultValue={name} name='name' onChange={(e) => setName(e.target.value)} />
-                                                        <div className='date-time'>
-                                                            {date} {time}
-                                                        </div>
-                                                    </div>
-                                                    <div className='amount-icon'>
-                                                        <input type='text' placeholder='Amount' className='amount' name='amount' defaultValue={amount} onChange={(e) => setAmount(e.target.value)} />
-                                                        <Close />
+                                {inputList && inputList.map((x, i) => {
+                                    return (
+                                        <React.Fragment>
+                                            <div className="head" style={{ /*display: 'flex',*/ justifyContent: 'flexSart', marginTop: '10px' }}>
+                                                <div className='inputs'>
+                                                    <input type='checkbox' name='status' defaultChecked={x.status} onClick={()=>AddStauts(x.id)} />
+                                                    <input type='text' name='name' className='note-input' placeholder='Enter Notes' defaultValue={x.name} onChange={e => handleInputChange(e,i)} />
+                                                    <div className='date-time'>
+                                                        {date} {time}
                                                     </div>
                                                 </div>
-                                            {/* </>
-                                        )
-                                    })
+                                                <div className='amount-icon'>
+                                                    <input type='text' placeholder='Amount' name='amount' className='amount' defaultValue={x.amount} onChange={e => { handleInputChange(e,i) }} />
+                                                    <Close onClick={() => { handleRemoveClick() }} />
+                                                </div>
+                                            </div>
+                                        </React.Fragment>
+
+                                    )
+                                })
                                 }
-                                 */}
 
 
-                                <div className='btn-box' style={{ position: 'fixed', height: '49px', bottom: '34px', right: '450px', justifyContent: 'center', textAlign: 'center' }}>
-                                    <button className='btn btn-note text-center' style={{ marginTop: '0' }}>Add Note</button>
+
+                                <div className='bottom-btn' onClick={handleAddClick}>
+                                    <button className='btn btn-bottom'>
+                                        <Add />
+                                    </button>
                                 </div>
                             </div>
                         </div>

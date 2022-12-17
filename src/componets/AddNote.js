@@ -18,37 +18,77 @@ function AddNote() {
     const [title, setTitle] = useState();
     const [name, setName] = useState();
     const [amount, setAmount] = useState();
-    const [status, setStatus] = useState(1);
-    const [total, setTotal] = useState();
+    const [status, setStatus] = useState(false);
+    const [id, setId] = useState()
+    // const [total, setTotal] = useState();
 
     const navigate = useNavigate();
 
-    const _addNote = (e) => {
-        const apiUrl = 'http://foodapis.techenablers.info/api/notes/create-note';
-        axios.post(apiUrl, {
-            name,
+    const _addNote = () => {
+
+        let arr = [];
+
+        for (let i = 0; i < inputList.length; i++) {
+            arr.push({
+                "id": inputList[i].id,
+                "post_note_id": inputList[i].postId,
+                "name": inputList[i].name,
+                "amount": inputList[i].amount,
+                "status": inputList[i].status,
+            })
+        }
+        axios.post('http://foodapis.techenablers.info/api/notes', {
             title,
-            amount,
-            status
+            checklists: arr
         }).then((resp) => {
             console.log(resp.data.data);
             setInputList(resp.data.data)
         })
         navigate('/');
     }
-
-    // const totalAdd = () => {
-    //     let sum = inputList.reduce(function (prev, current) {
-    //         return prev + +current.amount
-    //     }, 0);
-    //     // setTotal(sum);
-    //     console.log(sum)
-    // }
-
-    const handleAddClick = () => {
-        setInputList([...inputList, { name: name, amount: amount }])
+    const handleInputChange = (e, index) => {
+        const { name, value } = e.target;
+        const list = [...inputList];
+        list[index][name] = value;
+        // setInputList(list);
+        setName(list);
+        setAmount(list)
     };
 
+    const handleAddClick = () => {
+        setInputList([...inputList, { name: '', amount: '', status: false, id: id }])
+    };
+    const handleRemoveClick = (index) => {
+        const list = [...inputList];
+        list.splice(index, 1);
+        setInputList(list);
+    }
+    const AddStauts = (id) => {
+        // axios.post(`http://foodapis.techenablers.info/api/notes/${id}`,{
+        //     status:status
+        // })
+        //     .then((resp) => {
+        //         console.log(resp.data.data.notestatus);
+        //         // setStatus(resp.data.data.notestatus.status)
+        //     }) 
+        // console.log(id)
+
+        const newVal = inputList.map((item) => {
+            if (item.id === id) {
+                return {
+                    ...item,
+                    status: !item.status,
+                };
+            } else {
+                return {
+                    ...item,
+                };
+            }
+        });
+        console.log(newVal)
+        setStatus(newVal);
+        setInputList(newVal)
+    }
     return (
         <>
             <div className='main'>
@@ -85,15 +125,15 @@ function AddNote() {
                                         <>
                                             <div className="head" style={{ /*display: 'flex',*/ justifyContent: 'flexSart', marginTop: '10px' }}>
                                                 <div className='inputs'>
-                                                    <input type='checkbox' name='status' />
-                                                    <input type='text' className='note-input' placeholder='Enter Notes' name='name' defaultValue={x.name} onChange={(e) => setName(e.target.value)} />
+                                                    <input type='checkbox' name='status' defaultChecked={x.status} onClick={() => AddStauts(x.id)} />
+                                                    <input type='text' className='note-input' placeholder='Enter Notes' name='name' defaultValue={x.name} onChange={(e) => { handleInputChange(e, i) }} />
                                                     <div className='date-time'>
                                                         {date} {time}
                                                     </div>
                                                 </div>
                                                 <div className='amount-icon'>
-                                                    <input type='text' placeholder='Amount' className='amount' name='amount' defaultValue={x.amount} onChange={(e) => { setAmount(e.target.value); }} />
-                                                    <Close />
+                                                    <input type='text' placeholder='Amount' className='amount' name='amount' defaultValue={x.amount} onChange={(e) => handleInputChange(e, i)} />
+                                                    <Close onClick={() => { handleRemoveClick(i); }} />
                                                 </div>
                                             </div>
                                         </>

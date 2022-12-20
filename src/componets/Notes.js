@@ -9,9 +9,12 @@ import { Navbar, Container } from 'react-bootstrap';
 function Notes() {
     const navigate = useNavigate();
     const [notesArray, setNotesArray] = useState([]);
-    const editItem = (id) => {
-        navigate('/updateNotes/' + id);
+    const editItem = (id, total) => {
+        navigate('/updateNotes/' + id,
+            // { sum: total }
+        );
         console.log(id)
+        // console.log(sum)
     }
 
     useEffect(() => {
@@ -62,7 +65,7 @@ function Notes() {
                         </div>
                         <div className='row'>
                             {
-                                notesArray.map((x, index) => {
+                                notesArray.map((x, index, total) => {
                                     return (
 
                                         <div className='col-md-6 box'>
@@ -75,18 +78,18 @@ function Notes() {
                                                         <MoreVert />
                                                     </button>
                                                     <ul class="dropdown-menu">
-                                                        <li><a class="dropdown-item" onClick={() => editItem(x.id)}>Edit</a></li>
+                                                        <li><a class="dropdown-item" onClick={() => editItem(x.id, total)}>Edit</a></li>
                                                         <li><a class="dropdown-item" onClick={() => deleteItem(index, x.id)}>Delete</a></li>
                                                         <li><a class="dropdown-item" href='#'>Share</a></li>
                                                     </ul>
                                                 </div>
                                             </div>
-                                            {x.checklists.map((item,i)=>{
+                                            {x.checklists.map((item, i) => {
                                                 return (
                                                     <>
                                                         <div className='box-content'>
                                                             <div className='data' style={{ display: 'flex' }}>
-                                                                <input type='checkbox' checked={x.status} />
+                                                                <input type='checkbox' checked={item.status} />
                                                                 <p style={{ paddingTop: '0px', marginBottom: '0', paddingLeft: '4px' }}>{item.name}</p>
                                                                 <p style={{ paddingTop: '0px', marginBottom: '0', paddingLeft: '14px' }}>{item.amount}</p>
                                                             </div>
@@ -118,5 +121,3 @@ function Notes() {
 }
 
 export default Notes
-
-

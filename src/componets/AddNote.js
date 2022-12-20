@@ -20,7 +20,7 @@ function AddNote() {
     const [amount, setAmount] = useState();
     const [status, setStatus] = useState(false);
     const [id, setId] = useState()
-    // const [total, setTotal] = useState();
+    const [total, setTotal] = useState(0);
 
     const navigate = useNavigate();
 
@@ -63,31 +63,23 @@ function AddNote() {
         list.splice(index, 1);
         setInputList(list);
     }
-    const AddStauts = (id) => {
-        // axios.post(`http://foodapis.techenablers.info/api/notes/${id}`,{
-        //     status:status
-        // })
-        //     .then((resp) => {
-        //         console.log(resp.data.data.notestatus);
-        //         // setStatus(resp.data.data.notestatus.status)
-        //     }) 
-        // console.log(id)
+    const AddStauts = (e, id) => {
+        axios.post(`http://foodapis.techenablers.info/api/notes/${id}/status`,{
+            status:e.target.checked
+        })
+            .then((resp) => {
+                console.log(resp.data.data.checklist.status);
+                setStatus(resp.data.data.checklist.status)
+            }) 
+        console.log(id)
 
-        const newVal = inputList.map((item) => {
-            if (item.id === id) {
-                return {
-                    ...item,
-                    status: !item.status,
-                };
-            } else {
-                return {
-                    ...item,
-                };
-            }
-        });
-        console.log(newVal)
-        setStatus(newVal);
-        setInputList(newVal)
+    }
+
+    const totalAdd = () => {
+        let sum = inputList.reduce(function (prev, current) {
+            return prev + +current.amount
+        }, 0);
+        setTotal(sum);
     }
     return (
         <>
@@ -118,21 +110,21 @@ function AddNote() {
 
                         <div className='row'>
                             <div className='col-md-12'>
-                                <p style={{ color: 'black', marginLeft: '15px' }}>Sum : </p>
+                                <p style={{ color: 'black', marginLeft: '15px' }}>Sum : {total === 0 ? '' : total}</p>
                                 {inputList.map((x, i) => {
                                     {/* {total === 0 ? '' : total} */ }
                                     return (
                                         <>
                                             <div className="head" style={{ /*display: 'flex',*/ justifyContent: 'flexSart', marginTop: '10px' }}>
                                                 <div className='inputs'>
-                                                    <input type='checkbox' name='status' defaultChecked={x.status} onClick={() => AddStauts(x.id)} />
-                                                    <input type='text' className='note-input' placeholder='Enter Notes' name='name' defaultValue={x.name} onChange={(e) => { handleInputChange(e, i) }} />
+                                                    <input type='checkbox' name='status' defaultChecked={x.status} onClick={(e) => AddStauts(e, x.id)} />
+                                                    <input type='text' className='note-input' placeholder='Enter Notes' name='name' value={x.name} onChange={(e) => { handleInputChange(e, i) }} />
                                                     <div className='date-time'>
                                                         {date} {time}
                                                     </div>
                                                 </div>
                                                 <div className='amount-icon'>
-                                                    <input type='text' placeholder='Amount' className='amount' name='amount' defaultValue={x.amount} onChange={(e) => handleInputChange(e, i)} />
+                                                    <input type='text' placeholder='Amount' className='amount' name='amount' value={x.amount} onChange={(e) => { handleInputChange(e, i); totalAdd() }} />
                                                     <Close onClick={() => { handleRemoveClick(i); }} />
                                                 </div>
                                             </div>

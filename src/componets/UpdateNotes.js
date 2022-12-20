@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams, useLocation } from 'react-router-dom'
 import axios from 'axios';
 import '../componets/update.css';
 
@@ -13,29 +13,34 @@ function UpdateNotes() {
     const [title, setTitle] = useState();
     const [name, setName] = useState();
     const [amount, setAmount] = useState();
-    const [status,setStatus] = useState(false);
-    const [id,setId] = useState();
-    const [postid,setPostId] = useState();
+    const [status, setStatus] = useState(false);
+    const [id, setId] = useState();
+    const [postid, setPostId] = useState();
+    const [total, setTotal] = useState(0);
     const date = new Date().toLocaleDateString();
     const time = new Date().toLocaleTimeString();
     const param = useParams();
 
     const navigate = useNavigate();
-
+    // const { state} = useLocation()
     useEffect(() => {
         axios.get(`http://foodapis.techenablers.info/api/notes/${param.id}`)
             .then((resp) => {
-                console.log('update get',resp.data.data)
+                console.log('update get', resp.data.data)
                 setTitle(resp.data.data.note.title)
                 setInputList(resp.data.data.note.checklists)
-            })
+            });
+        // let we = state.reduce(function (prev, current) {
+        //     return prev + +current.amount
+        // }, 0);
+        // console.log(state);
     }, []);
 
     const _updateNote = () => {
 
         let arr = [];
 
-        for(let i = 0; i < inputList.length; i++) {
+        for (let i = 0; i < inputList.length; i++) {
             arr.push({
                 "id": inputList[i].id,
                 "post_note_id": inputList[i].postId,
@@ -48,14 +53,14 @@ function UpdateNotes() {
         // const payload = {
         //     arr
         // }
-        axios.put(`http://foodapis.techenablers.info/api/notes/${param.id}`,{
+        axios.put(`http://foodapis.techenablers.info/api/notes/${param.id}`, {
             title,
-            checklists:arr
+            checklists: arr
         })
-        .then((resp)=>{
-            // console.log('update data',resp.data.data.note)
-            setInputList(resp.data.data.note)
-        })
+            .then((resp) => {
+                // console.log('update data',resp.data.data.note)
+                setInputList(resp.data.data.note)
+            })
         navigate('/');
     }
     const handleInputChange = (e, index) => {
@@ -67,7 +72,7 @@ function UpdateNotes() {
     };
 
     const handleAddClick = () => {
-        setInputList([...inputList, {id:id, name: '', amount: '', status : false }])
+        setInputList([...inputList, { id: id, name: '', amount: '', status: false }])
     };
 
     const handleRemoveClick = (index) => {
@@ -76,33 +81,38 @@ function UpdateNotes() {
         setInputList(list);
     }
 
-    const AddStauts = (id) => {
-        // axios.post(`http://foodapis.techenablers.info/api/notes/${id}`,{
-        //     status:status
-        // })
-        //     .then((resp) => {
-        //         console.log(resp.data.data.notestatus);
-        //         // setStatus(resp.data.data.notestatus.status)
-        //     }) 
-        // console.log(id)
+    const AddStauts = (e, id) => {
+        axios.post(`http://foodapis.techenablers.info/api/notes/${id}/status`,{
+            status:e.target.checked
+        })
+            .then((resp) => {
+                console.log(resp.data.data.checklist.status);
+                setStatus(resp.data.data.checklist.status)
+            }) 
+        console.log(id)
 
-        const newVal = inputList.map((item) => {
-            if (item.id === id) {
-                return {
-                    ...item,
-                    status: !item.status,
-                };
-            } else {
-                return {
-                    ...item,
-                };
-            }
-        });
-        console.log(newVal)
-        setStatus(newVal);
-        setInputList(newVal)
+        // const newVal = inputList.map((item) => {
+        //     if (item.id === id) {
+        //         return {
+        //             ...item,
+        //             status: !item.status,
+        //         };
+        //     } else {
+        //         return {
+        //             ...item,
+        //         };
+        //     }
+        // });
+        // console.log(newVal)
+        // setStatus(newVal);
+        // setInputList(newVal)
     }
-
+    const totalAdd = () => {
+        let sum = inputList.reduce(function (prev, current) {
+            return prev + +current.amount
+        }, 0);
+        setTotal(sum);
+    }
 
     return (
         <>
@@ -139,14 +149,14 @@ function UpdateNotes() {
                                         <React.Fragment>
                                             <div className="head" style={{ /*display: 'flex',*/ justifyContent: 'flexSart', marginTop: '10px' }}>
                                                 <div className='inputs'>
-                                                    <input type='checkbox' name='status' defaultChecked={x.status} onClick={()=>AddStauts(x.id)} />
-                                                    <input type='text' name='name' className='note-input' placeholder='Enter Notes' defaultValue={x.name} onChange={e => handleInputChange(e,i)} />
+                                                    <input type='checkbox' name='status' defaultChecked={x.status} onClick={(e) => AddStauts(e, x.id)} />
+                                                    <input type='text' name='name' className='note-input' placeholder='Enter Notes' defaultValue={x.name} onChange={e => handleInputChange(e, i)} />
                                                     <div className='date-time'>
                                                         {date} {time}
                                                     </div>
                                                 </div>
                                                 <div className='amount-icon'>
-                                                    <input type='text' placeholder='Amount' name='amount' className='amount' defaultValue={x.amount} onChange={e => { handleInputChange(e,i) }} />
+                                                    <input type='text' placeholder='Amount' name='amount' className='amount' defaultValue={x.amount} onChange={e => { handleInputChange(e, i); totalAdd() }} />
                                                     <Close onClick={() => { handleRemoveClick() }} />
                                                 </div>
                                             </div>
